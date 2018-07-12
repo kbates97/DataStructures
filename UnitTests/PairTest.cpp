@@ -4,6 +4,7 @@
 #include "CrtCheckMemory.h"
 
 #include "Pair.h"
+#include "Array.h"
 
 #define _CRTDBG_MAP_ALLOC
 
