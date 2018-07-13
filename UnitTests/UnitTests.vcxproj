@@ -167,6 +167,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Array2DTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="PairTest.cpp" />
     <ClCompile Include="stdafx.cpp">

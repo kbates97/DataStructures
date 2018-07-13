@@ -14,8 +14,8 @@ public:
 	Array2D(const Array2D& copy);
 	~Array2D() = default;
 	Array2D<T>& operator=(const Array2D& rhs);
-	//Array2D(Array2D<T>&& array) noexcept;
-	//Array2D<T>& operator=(Array2D<T>&& rhs) noexcept;
+	Array2D(Array2D<T>&& array) noexcept;
+	Array2D<T>& operator=(Array2D<T>&& rhs) noexcept;
 
 	T Select(const int row, const int column) const noexcept(false) override;
 	T& Select(const int row, const int column) noexcept(false) override;
@@ -55,28 +55,51 @@ inline Array2D<T>& Array2D<T>::operator=(const Array2D& rhs)
 {
 	if (this != &rhs)
 	{
-		storage_.setLength(rhs.getRow() * rhs.getColumn());
-		for (size_t i = 0; i < rhs.getRow(); i++) {
-			for (size_t k = 0; k < rhs.getColumn(); k++) {
-				storage_[(int)i*rhs.getColumn() + (int)k] = rhs[(int)i][(int)k];
+		storage_.SetLength(rhs.GetRow() * rhs.GetColumn());
+		for (size_t i = 0; i < rhs.GetRow(); i++) {
+			for (size_t k = 0; k < rhs.GetColumn(); k++) {
+				storage_[(int)i*rhs.GetColumn() + (int)k] = rhs[(int)i][(int)k];
 			}
 		}
 	}
-	row_ = rhs.getRow();
-	col_ = rhs.getColumn();
+	
+	row_ = rhs.GetRow();
+	col_ = rhs.GetColumn();
+	return *this;
+}
+
+template<class T>
+inline Array2D<T>::Array2D(Array2D<T>&& array) noexcept
+{
+	row_ = array.row_;
+	col_ = array.col_;
+	storage_ = std::move(array.storage_);
+	array.row_ = 0;
+	array.col_ = 0;
+}
+
+template<class T>
+inline Array2D<T>& Array2D<T>::operator=(Array2D<T>&& rhs) noexcept
+{
+	row_ = rhs.row_;
+	col_ = rhs.col_;
+	storage_ = std::move(rhs.storage_);
+	rhs.row_ = 0;
+	rhs.col_ = 0;
+
 	return *this;
 }
 
 template<class T>
 inline T& Array2D<T>::Select(const int row, const int column)
 {
-	return storage_[row * col_ + col];
+	return storage_[row * col_ + column];
 }
 
 template<class T>
 inline T Array2D<T>::Select(const int row, const int column) const
 {
-	return storage_[row * col_ + col];
+	return storage_[row * col_ + column];
 }
 
 template <class T>
@@ -91,21 +114,63 @@ inline Row<T> Array2D<T>::operator[](int index) const
 	return Row<T>(*this, index);
 }
 
-//template<class T>
-//inline int Array2D<T>::GetRow() const
-//{
-//	return row_;
-//}
+template<class T>
+inline int Array2D<T>::GetRow() const noexcept
+{
+	return row_;
+}
+
+template<class T>
+inline int Array2D<T>::GetColumn() const noexcept
+{
+	return col_;
+}
 
 template<class T>
 inline void Array2D<T>::SetRow(const int rows)
 {
+	Array<T> temp(rows * col_);
+	if (rows < row_)
+	{
+		for (size_t i = 0; i < rows * col_; ++i)
+		{
+			temp[i] = storage_[i];
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < row_ * col_; ++i)
+		{
+			temp[i] = storage_[i];
+		}
+	}
+	storage_ = std::move(temp);
 	row_ = rows;
 }
 
 template<class T>
 inline void Array2D<T>::SetColumn(const int columns)
 {
+	Array2D<T> temp(row_, columns);
+	if (columns < col_)
+	{
+		for (size_t i = 0; i < row_; ++i)
+		{
+			for (size_t k = 0; k < columns; ++k)
+			{
+				temp.Select(i, k) = i;//this.Select(i, k);
+			}
+		}
+	}
+	else
+	{
+		for (size_t i = 0; i < row_ * col_; ++i)
+		{
+			temp.storage_[i] = storage_[i];
+		}
+	}
+	
+	*this = std::move(temp);
 	col_ = columns;
 }
 #endif

@@ -21,3 +21,18 @@ private:
 };
 
 #endif
+
+template<class T>
+inline Row<T>::Row(const IArray2D<T>& array, const int row) :array2D_(array), row_(row) {}
+
+template<class T>
+inline T& Row<T>::operator[](const int col)
+{
+	return array2D_.Select(row_, col);
+}
+
+template<class T>
+inline T Row<T>::operator[](const int col) const
+{
+	return array2D_.Select(row_, col);
+}

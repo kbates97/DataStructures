@@ -105,7 +105,7 @@ template<class T>
 inline T& Array<T>::operator[](int index)
 {
 	if (length_ < index - start_index_)
-		throw 1; /*Exception("Out of bounds");*/
+		throw AdtException("Out of bounds");
 	index -= start_index_;
 	return storage_[index];
 }
