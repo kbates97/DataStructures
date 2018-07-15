@@ -41,7 +41,8 @@ inline Array2D<T>::Array2D(const int row, const int col)
 {
 	row_ = row;
 	col_ = col;
-	storage_ = Array<T>(row*col, 0);
+	if (row * col > 0)
+		storage_ = Array<T>(row*col, 0);
 }
 
 template<class T>
@@ -144,6 +145,7 @@ inline void Array2D<T>::SetRow(const int rows)
 			temp[i] = storage_[i];
 		}
 	}
+	storage_.~Array();
 	storage_ = std::move(temp);
 	row_ = rows;
 }
@@ -158,7 +160,7 @@ inline void Array2D<T>::SetColumn(const int columns)
 		{
 			for (size_t k = 0; k < columns; ++k)
 			{
-				temp.Select(i, k) = i;//this.Select(i, k);
+				temp.Select(i, k) = Select(i, k);
 			}
 		}
 	}
@@ -169,7 +171,7 @@ inline void Array2D<T>::SetColumn(const int columns)
 			temp.storage_[i] = storage_[i];
 		}
 	}
-	
+	storage_.~Array();
 	*this = std::move(temp);
 	col_ = columns;
 }

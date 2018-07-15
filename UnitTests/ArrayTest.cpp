@@ -44,6 +44,30 @@ namespace UnitTests
 			Assert::AreEqual(array_no_start.GetStartIndex(), 0);
 		}
 
+		TEST_METHOD(TestAssignmentConstructor_Strings)
+		{
+			// Arrange
+			CrtCheckMemory check;
+			size_t length = 80;
+			int start_index_possitive = 5;
+			int start_index_negative = -5;
+
+			// Act
+			Array<string> array_possitive_start(length, start_index_possitive);
+			Array<string> array_negative_start(length, start_index_negative);
+			Array<string> array_no_start(length);
+
+			// Assert
+			Assert::AreEqual(array_negative_start.GetLength(), length);
+			Assert::AreEqual(array_negative_start.GetStartIndex(), start_index_negative);
+
+			Assert::AreEqual(array_possitive_start.GetLength(), length);
+			Assert::AreEqual(array_possitive_start.GetStartIndex(), start_index_possitive);
+
+			Assert::AreEqual(array_no_start.GetLength(), length);
+			Assert::AreEqual(array_no_start.GetStartIndex(), 0);
+		}
+
 		TEST_METHOD(TestDefaultConstructor_Sunny)
 		{
 			CrtCheckMemory check;

@@ -8,7 +8,7 @@ class Array
 {
 public:
 	explicit Array() = default;
-	~Array() { delete storage_; };
+	~Array();
 	explicit Array(size_t length, int start_index = 0) noexcept(false);
 
 	explicit Array(const int * c_array, const size_t size);
@@ -38,6 +38,12 @@ private:
 };
 
 
+
+template<class T>
+inline Array<T>::~Array()
+{
+	delete[] storage_;
+}
 
 template<class T>
 inline Array<T>::Array(size_t length, int start_index)

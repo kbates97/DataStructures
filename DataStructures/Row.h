@@ -28,7 +28,7 @@ inline Row<T>::Row(const IArray2D<T>& array, const int row) :array2D_(array), ro
 template<class T>
 inline T& Row<T>::operator[](const int col)
 {
-	return array2D_.Select(row_, col);
+	return const_cast<IArray2D<T>&>(array2D_).Select(row_, col);
 }
 
 template<class T>
