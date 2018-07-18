@@ -9,7 +9,7 @@ template <class T>
 class Array2D : public IArray2D<T>
 {
 public:
-	Array2D() = default;
+	Array2D();
 	Array2D(const int row, const int col) noexcept(false);
 	Array2D(const Array2D& copy);
 	~Array2D() = default;
@@ -35,6 +35,12 @@ private:
 	int col_ = 1;
 };
 
+
+template<class T>
+inline Array2D<T>::Array2D()
+{
+	storage_ = Array<T>(row_*col_, 0);
+}
 
 template<class T>
 inline Array2D<T>::Array2D(const int row, const int col)
