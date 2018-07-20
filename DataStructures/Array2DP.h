@@ -135,12 +135,16 @@ inline Array2DP<T>& Array2DP<T>::operator=(Array2DP && array) noexcept
 template<class T>
 inline T Array2DP<T>::Select(int row, int column) const
 {
+	if (row > row_ - 1 || column > col_ - 1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row][column];
 }
 
 template<class T>
 inline T & Array2DP<T>::Select(int row, int column)
 {
+	if (row > row_ - 1 || column > col_ - 1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row][column];
 }
 

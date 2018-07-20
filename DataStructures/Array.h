@@ -110,7 +110,7 @@ inline Array<T>& Array<T>::operator=(Array<T>&& rhs) noexcept(false)
 template<class T>
 inline T& Array<T>::operator[](int index)
 {
-	if (length_ < index - start_index_)
+	if (length_ < index - start_index_ || index - start_index_ < 0)
 		throw AdtException("Out of bounds");
 	index -= start_index_;
 	return storage_[index];
@@ -119,6 +119,8 @@ inline T& Array<T>::operator[](int index)
 template<class T>
 inline T Array<T>::operator[](int index) const
 {
+	if (length_ < index - start_index_ || index - start_index_ < 0)
+		throw AdtException("Out of bounds");
 	index -= start_index_;
 	return storage_[index];
 }

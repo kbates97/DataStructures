@@ -100,12 +100,16 @@ inline Array2D<T>& Array2D<T>::operator=(Array2D<T>&& rhs) noexcept
 template<class T>
 inline T& Array2D<T>::Select(const int row, const int column)
 {
+	if (row > row_-1 || column > col_-1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row * col_ + column];
 }
 
 template<class T>
 inline T Array2D<T>::Select(const int row, const int column) const
 {
+	if (row > row_ - 1 || column > col_ - 1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row * col_ + column];
 }
 
