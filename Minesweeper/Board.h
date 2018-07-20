@@ -20,16 +20,19 @@ public:
 	char Select(const int row, const int col);
 	void Mark(const int row, const int col);
 
-	void resetBoard();
-	void printBoard();
+	void ResetBoard();
+	void PrintBoard();
 
+	bool AllBombsMarked();
 
 private:
 	Array2D<Cell> board_;
 	size_t bombs_;
+	int bombsMarked_;
 
-	void incrementNumbersAroundBomb(int row, int col);
+	void IncrementNumbersAroundBomb(int row, int col);
 	void ClearBlanks(const int row, const int col);
+	void ClearBoard();
 };
 
 #endif // !Board_H
