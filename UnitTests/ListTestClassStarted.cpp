@@ -67,6 +67,7 @@ namespace UnitTests
 				{
 					Assert::AreEqual(to_string(i++), list_node->GetData());
 				}
+				Assert::AreEqual(true, list_1.IsEmpty());
 			}
 		}
 
@@ -361,6 +362,46 @@ namespace UnitTests
 
 				Assert::AreEqual(5, list.First());
 				Assert::AreEqual(15, list.Last());
+			}
+			catch (AdtException & exception)
+			{
+				Assert::Fail(exception.What());
+			}
+		}
+
+		TEST_METHOD(ListForwardBegin_ShouldReturnHead)
+		{
+			try
+			{
+				List<int> list;
+				list.Append(5);
+				auto iterator = list.ForwardBegin();
+				Assert::AreEqual(5, *iterator, L"Fail with single item list");
+				list.Append(10);
+				list.Append(15);
+				list.Append(20);
+				iterator = list.ForwardBegin();
+				Assert::AreEqual(5, *iterator, L"Fail with multi item list");
+			}
+			catch (AdtException & exception)
+			{
+				Assert::Fail(exception.What());
+			}
+		}
+
+		TEST_METHOD(ListBackwardBegin_ShouldReturnTail)
+		{
+			try
+			{
+				List<int> list;
+				list.Append(5);
+				auto iterator = list.BackwardBegin();
+				Assert::AreEqual(5, *iterator, L"Fail with single item list");
+				list.Append(10);
+				list.Append(15);
+				list.Append(20);
+				iterator = list.BackwardBegin();
+				Assert::AreEqual(20, *iterator, L"Fail with multi item list");
 			}
 			catch (AdtException & exception)
 			{

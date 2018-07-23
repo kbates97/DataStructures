@@ -8,7 +8,7 @@ template <class T>
 class ListStack
 {
 public:
-	ListStack();
+	ListStack() = default;
 	~ListStack() = default;
 	ListStack(const ListStack& copy);
 	ListStack<T>& operator=(const ListStack& rhs);
@@ -24,11 +24,14 @@ public:
 private:
 	List<T> stack_;
 	size_t size_ = 0;
-
-	
-	
 };
 
 
 
 #endif    
+
+template<class T>
+inline ListStack<T>::ListStack(const ListStack & copy)
+{
+	*this = copy;
+}

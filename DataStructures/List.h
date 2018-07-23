@@ -5,7 +5,8 @@
 
 #include "ListNode.h"
 #include "Array.h"
-
+#include "ForwardIterator.h"
+#include "BackwardIterator.h"
 
 template<class T>
 class List
@@ -35,6 +36,11 @@ public:
 	List(const T* data, size_t & size) noexcept(false);
 	List(const Array<T> array) noexcept(false);
 	Array<T> & ToArray() noexcept(false);
+
+	ForwardIterator<T> ForwardBegin();
+	ForwardIterator<T> ForwardEnd();
+	BackwardIterator<T> BackwardBegin();
+	BackwardIterator<T> BackwardEnd();
 private:
 	ListNode<T>* head_ = nullptr;
 	ListNode<T>* tail_ = nullptr;
@@ -79,6 +85,30 @@ inline Array<T>& List<T>::ToArray() noexcept(false)
 }
 
 template<class T>
+inline ForwardIterator<T> List<T>::ForwardBegin()
+{
+	return ForwardIterator<T>(head_);
+}
+
+template<class T>
+inline ForwardIterator<T> List<T>::ForwardEnd()
+{
+	return ForwardIterator<T>(tail_->GetNext());
+}
+
+template<class T>
+inline BackwardIterator<T> List<T>::BackwardBegin()
+{
+	return BackwardIterator<T>(tail_);
+}
+
+template<class T>
+inline BackwardIterator<T> List<T>::BackwardEnd()
+{
+	return BackwardIterator<T>(head_->GetPrevious());
+}
+
+template<class T>
 inline List<T>::List(const List<T> & copy) noexcept(false)
 {
 	*this = copy;
@@ -88,6 +118,7 @@ template<class T>
 inline List<T>::List(List<T> && copy) noexcept
 {
 	*this = copy;
+	copy.Purge();
 }
 
 template<class T>
@@ -115,18 +146,23 @@ inline List<T> & List<T>::operator=(List<T> && rhs) noexcept
 	{
 		this->Append(list_node->GetData());
 	}
-	rhs.~List();
+	rhs.Purge();
 	return *this;
 }
 
 template<class T>
 inline void List<T>::Append(const T & data) noexcept(false)
 {
-	ListNode<T>* newNode = new ListNode<T>(data, nullptr, tail_);
-	this->tail_->SetNext(newNode);
-	this->tail_ = newNode;
-	if (this->head_ == nullptr)
-		this->head_ = newNode;
+	if (tail_ != nullptr)
+	{
+		tail_ = new ListNode<T>(data, nullptr, tail_);
+		tail_->GetPrevious()->SetNext(tail_);
+	}
+	else
+	{
+		head_ = tail_ = new ListNode<T>(data);
+	}
+
 }
 
 template<class T>
@@ -137,8 +173,19 @@ inline void List<T>::Extract(const T & data) noexcept(false)
 		travel = travel->GetNext();
 	if (travel->GetData() != data)
 		return;//throw exception data not found
-	travel->GetNext()->SetPrevious(travel->GetPrevious());
-	travel->GetPrevious()->SetNext(travel->GetNext());
+	if (travel->GetNext())
+	{
+		travel->GetNext()->SetPrevious(travel->GetPrevious());
+	}
+	else
+		tail_ = travel->GetPrevious();
+	if (travel->GetPrevious())
+	{
+
+		travel->GetPrevious()->SetNext(travel->GetNext());
+	}
+	else
+		head_ = travel->GetNext();
 	delete travel;
 }
 
@@ -181,26 +228,27 @@ inline void List<T>::InsertBefore(const T & data, const T & before) noexcept(fal
 template<class T>
 inline void List<T>::Prepend(const T & data) noexcept(false)
 {
-	ListNode<T>* newNode = new ListNode<T>(data, head_, nullptr);
-	this->head_->SetPrevious(newNode);
-	this->head_ = newNode;
-	if (this->tail_ == nullptr)
-		this->tail_ = newNode;
+	if (head_ != nullptr)
+	{
+		head_ = new ListNode<T>(data, head_, nullptr);
+		head_->GetNext()->SetPrevious(head_);
+	}
+	else
+	{
+		head_ = tail_ = new ListNode<T>(data, nullptr, nullptr);
+	}
 }
 
 template<class T>
 inline void List<T>::Purge() noexcept(false)
 {
-	if (head_ == nullptr)
-		return;
-	while (head_->GetNext() != nullptr)
+	while (head_)
 	{
-		head_ = head_->GetNext();
-		delete head_->GetPrevious();
-		//head_->SetPrevious(nullptr);
+		auto temp = head_->GetNext();
+		delete head_;
+		head_ = temp;
 	}
-	delete head_;
-	delete tail_;
+	head_ = tail_ = nullptr;
 }
 
 template<class T>
