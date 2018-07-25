@@ -153,6 +153,7 @@ void Board::IncrementNumbersAroundBomb(int row, int col)
 
 void Board::PrintBoard()
 {
+	system("CLS");
 	for (size_t i = 0; i < board_.GetRow(); ++i)
 	{
 		for (size_t k = 0; k < board_.GetColumn(); ++k)
