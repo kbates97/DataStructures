@@ -212,7 +212,7 @@ namespace UnitTests
 			}
 		}
 
-		TEST_METHOD(List_First_ShouldeualFortyFive)
+		TEST_METHOD(List_First_ShouldeEqualFortyFive)
 		{
 			CrtCheckMemory check;
 			try
@@ -371,6 +371,7 @@ namespace UnitTests
 
 		TEST_METHOD(ListForwardBegin_ShouldReturnHead)
 		{
+			CrtCheckMemory check;
 			try
 			{
 				List<int> list;
@@ -391,6 +392,7 @@ namespace UnitTests
 
 		TEST_METHOD(ListBackwardBegin_ShouldReturnTail)
 		{
+			CrtCheckMemory check;
 			try
 			{
 				List<int> list;
@@ -402,6 +404,47 @@ namespace UnitTests
 				list.Append(20);
 				iterator = list.BackwardBegin();
 				Assert::AreEqual(20, *iterator, L"Fail with multi item list");
+			}
+			catch (AdtException & exception)
+			{
+				Assert::Fail(exception.What());
+			}
+		}
+
+		TEST_METHOD(ListArrayPtrCtor_ShouldCopyValuesFromArrayToList)
+		{
+			CrtCheckMemory check;
+			try 
+			{
+				size_t array[5] = { 0, 1, 2, 3, 4 };
+				List<size_t> list(array, 5);
+				size_t i = 0;
+
+				for (auto list_node = list.GetHead(); list_node != nullptr; list_node = list_node->GetNext())
+				{
+					Assert::AreEqual(i++, list_node->GetData());
+				}
+			}
+			catch (AdtException & exception)
+			{
+				Assert::Fail(exception.What());
+			}
+		}
+
+		TEST_METHOD(ListArrayTCtor_ShouldCopyValuesFromArrayToList)
+		{
+			CrtCheckMemory check;
+			try
+			{
+				size_t arr[5] = { 1, 2, 3, 4, 5 };
+				Array<size_t> array(arr, 5);
+				List<size_t> list(array);
+				size_t i = 1;
+
+				for (auto list_node = list.GetHead(); list_node != nullptr; list_node = list_node->GetNext())
+				{
+					Assert::AreEqual(i++, list_node->GetData());
+				}
 			}
 			catch (AdtException & exception)
 			{

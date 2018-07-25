@@ -63,7 +63,6 @@ inline ArrayStack<T>::ArrayStack(ArrayStack && copy) noexcept
 template<class T>
 inline ArrayStack<T>& ArrayStack<T>::operator=(ArrayStack && rhs) noexcept
 {
-	stack_.~Array();
 	stack_ = std::move(rhs.stack_);
 	numItems_ = rhs.numItems_;
 	rhs.numItems_ = 0;

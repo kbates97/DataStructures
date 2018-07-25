@@ -169,7 +169,10 @@
   <ItemGroup>
     <ClCompile Include="Array2DPTest.cpp" />
     <ClCompile Include="Array2DTest.cpp" />
+    <ClCompile Include="ArrayQueueTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
+    <ClCompile Include="ListQueueTest.cpp" />
+    <ClCompile Include="ListStackTest.cpp" />
     <ClCompile Include="ListTestClassStarted.cpp" />
     <ClCompile Include="PairTest.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -35,3 +35,70 @@ inline ListStack<T>::ListStack(const ListStack & copy)
 {
 	*this = copy;
 }
+
+template<class T>
+inline ListStack<T>& ListStack<T>::operator=(const ListStack & rhs)
+{
+	stack_ = rhs.stack_;
+	size_ = rhs.size_;
+	return *this;
+}
+
+template<class T>
+inline ListStack<T>::ListStack(ListStack<T>&& copy) noexcept
+{
+	*this = copy;
+	copy.Clear();
+}
+
+template<class T>
+inline ListStack<T>& ListStack<T>::operator=(ListStack && rhs) noexcept
+{
+	stack_ = rhs.stack_;
+	size_ = rhs.size_;
+	rhs.Clear();
+	return *this;
+}
+
+template<class T>
+inline void ListStack<T>::Push(T data) noexcept(false)
+{
+	stack_.Prepend(data);
+	++size_;
+}
+
+template<class T>
+inline T ListStack<T>::Pop() noexcept(false)
+{
+	if (size_ == 0)
+		throw AdtException("Underflow");
+	T data = stack_.First();
+	stack_.Extract(data);
+	--size_;
+	return data;
+}
+
+template<class T>
+inline const T & ListStack<T>::Peek() const noexcept(false)
+{
+	return stack_.First();
+}
+
+template<class T>
+inline size_t ListStack<T>::Size() const
+{
+	return size_;
+}
+
+template<class T>
+inline bool ListStack<T>::IsEmpty() const
+{
+	return size_ == 0;
+}
+
+template<class T>
+inline void ListStack<T>::Clear() noexcept
+{
+	size_ = 0;
+	stack_.Purge();
+}

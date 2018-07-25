@@ -33,9 +33,9 @@ public:
 	ListNode<T>* GetTail() const noexcept;
 	const bool IsEmpty() noexcept;
 
-	List(const T* data, size_t & size) noexcept(false);
+	List(const T* data, size_t size) noexcept(false);
 	List(const Array<T> array) noexcept(false);
-	Array<T> & ToArray() noexcept(false);
+	//Array<T> & ToArray() noexcept(false);
 
 	ForwardIterator<T> ForwardBegin();
 	ForwardIterator<T> ForwardEnd();
@@ -49,7 +49,7 @@ private:
 #endif
 
 template<class T>
-inline List<T>::List(const T * data, size_t & size) noexcept(false)
+inline List<T>::List(const T * data, size_t size) noexcept(false)
 {
 	for (size_t i = 0; i < size; ++i)
 	{
@@ -64,24 +64,6 @@ inline List<T>::List(const Array<T> array) noexcept(false)
 	{
 		Append(array[i]);
 	}
-}
-
-template<class T>
-inline Array<T>& List<T>::ToArray() noexcept(false)
-{
-	int size = 0;
-	ListNode<T>* trav = head_;
-	for (auto list_node = head_; list_node != nullptr; list_node = list_node->GetNext())
-	{
-		++size;
-	}
-	Array<T> temp = new Array(size);
-	for (size_t i = 0; i < size; ++i)
-	{
-		temp[i] = trav->GetData();
-		trav = trav->GetNext();
-	}
-	return temp;
 }
 
 template<class T>

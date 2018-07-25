@@ -158,7 +158,7 @@ inline void Array2D<T>::SetRow(const int rows)
 		}
 	}
 	storage_.~Array();
-	storage_ = std::move(temp);
+	storage_ = temp;
 	row_ = rows;
 }
 

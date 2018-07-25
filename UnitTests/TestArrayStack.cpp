@@ -236,28 +236,111 @@ namespace UnitTests
 			Assert::AreEqual((size_t)3, stack.Size());
 		}
 
-		TEST_METHOD(ArrayStackIsFull_ShouldBeFull)
+		TEST_METHOD(ArrayStackIsFull_ShouldBeTrue)
 		{
 			CrtCheckMemory check;
-			ArrayStack<int> stack(1);
-
+			ArrayStack<int> stack(2);
 			stack.Push(1);
+			stack.Push(2);
 
 			Assert::IsTrue(stack.IsFull());
-
-			stack.Pop();
-			Assert::IsFalse(stack.IsFull(), L"Should be false");
 		}
 
-		TEST_METHOD(ArrayStackIsEmpty_ShouldBeEmpty)
+		TEST_METHOD(ArrayStackIsFull_ShouldBeFalse)
+		{
+			CrtCheckMemory check;
+			ArrayStack<int> stack(2);
+			stack.Push(1);
+			stack.Push(2);
+
+			stack.Pop();
+
+			Assert::IsFalse(stack.IsFull());
+		}
+
+		TEST_METHOD(ArrayStackIsEmpty_ShouldBeTrue)
 		{
 			CrtCheckMemory check;
 			ArrayStack<int> stack(3);
 
 			Assert::IsTrue(stack.IsEmpty());
+		}
 
-			stack.Push(1);
-			Assert::IsFalse(stack.IsEmpty(), L"Should be false");
+		TEST_METHOD(ArrayStackIsEmpty_ShouldBeFalse)
+		{
+			CrtCheckMemory check;
+			ArrayStack<int> stack(3);
+
+			stack.Push(10);
+
+			Assert::IsFalse(stack.IsEmpty());
+		}
+
+		TEST_METHOD(ArrayStackIsClear_ShouldBeEmpty)
+		{
+			CrtCheckMemory check;
+			ArrayStack<int> stack(3);
+			stack.Push(10);
+			stack.Push(11);
+			stack.Push(12);
+
+			stack.Clear();
+
+			Assert::IsTrue(stack.IsEmpty());
+		}
+
+		TEST_METHOD(ArrayStackCosntructor_Strings_ShouldBeEmpty)
+		{
+			CrtCheckMemory check;
+			ArrayStack<string> stack(10);
+
+			Assert::IsTrue(stack.IsEmpty());
+		}
+
+		TEST_METHOD(ArrayStackPush_Strings_ShouldBeFull)
+		{
+			CrtCheckMemory check;
+			ArrayStack<string> stack(2);
+
+			stack.Push("Hello");
+			stack.Push("World");
+
+			Assert::IsTrue(stack.IsFull());
+		}
+
+		TEST_METHOD(ArrayStackPop_Strings_ShouldBeWorld)
+		{
+			CrtCheckMemory check;
+			ArrayStack<string> stack(2);
+			stack.Push("Hello");
+			stack.Push("World");
+
+			string world = "World";
+
+			Assert::AreEqual(world, stack.Pop());
+		}
+
+		TEST_METHOD(ArrayStackSize_Strings_ShouldBeTwo)
+		{
+			CrtCheckMemory check;
+			ArrayStack<string> stack(3);
+
+			stack.Push("Hello");
+			stack.Push("World");
+
+			Assert::AreEqual((size_t)2, stack.Size());
+		}
+
+		TEST_METHOD(ArrayStackPeek_Strings_ShouldBeWorld)
+		{
+			CrtCheckMemory check;
+			ArrayStack<string> stack(2);
+			stack.Push("Hello");
+			stack.Push("World");
+
+			string peek = "World";
+
+			Assert::AreEqual(peek, stack.Peek());
 		}
 	};
 }

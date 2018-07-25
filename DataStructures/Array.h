@@ -11,7 +11,7 @@ public:
 	~Array();
 	explicit Array(size_t length, int start_index = 0) noexcept(false);
 
-	explicit Array(const int * c_array, const size_t size);
+	explicit Array(const T * c_array, const size_t size);
 
 	Array(const Array<T>& array) noexcept(false);
 
@@ -55,7 +55,7 @@ inline Array<T>::Array(size_t length, int start_index)
 }
 
 template<class T>
-inline Array<T>::Array(const int * c_array, const size_t size)
+inline Array<T>::Array(const T * c_array, const size_t size)
 {
 	if (size > 0)
 	{
@@ -99,6 +99,7 @@ inline Array<T>::Array(Array<T>&& array) noexcept
 template<class T>
 inline Array<T>& Array<T>::operator=(Array<T>&& rhs) noexcept(false)
 {
+	delete storage_;
 	length_ = rhs.length_;
 	storage_ = rhs.storage_;
 	rhs.length_ = 0;
