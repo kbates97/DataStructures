@@ -25,6 +25,9 @@
     <ClInclude Include="Array2DP.h" />
     <ClInclude Include="IArray2D.h" />
     <ClInclude Include="IRow.h" />
+    <ClInclude Include="List.h" />
+    <ClInclude Include="ListNode.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Pair.h" />
     <ClInclude Include="Row.h" />
   </ItemGroup>
