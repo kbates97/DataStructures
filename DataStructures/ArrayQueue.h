@@ -48,7 +48,6 @@ inline ArrayQueue<T>::ArrayQueue(const ArrayQueue<T>& copy) noexcept(false)
 template<class T>
 inline ArrayQueue<T>& ArrayQueue<T>::operator=(const ArrayQueue<T>& rhs) noexcept(false)
 {
-	queue_.~Array();
 	queue_ = rhs.queue_;
 	size_ = rhs.size_;
 	return *this;
@@ -64,7 +63,6 @@ inline ArrayQueue<T>::ArrayQueue(ArrayQueue<T>&& copy) noexcept
 template<class T>
 inline ArrayQueue<T>& ArrayQueue<T>::operator=(ArrayQueue<T>&& rhs) noexcept
 {
-	queue_.~Array();
 	queue_ = rhs.queue_;
 	size_ = rhs.size_;
 	rhs.Clear();

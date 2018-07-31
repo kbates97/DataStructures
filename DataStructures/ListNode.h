@@ -45,8 +45,7 @@ inline ListNode<T>::ListNode(const ListNode<T>& copy) noexcept
 template<class T>
 inline ListNode<T>::ListNode(ListNode<T>&& copy) noexcept
 {
-	this = *copy;
-	copy.~ListNode();
+	this = std::move(copy);
 }
 
 template<class T>
@@ -61,8 +60,15 @@ inline ListNode<T>& ListNode<T>::operator=(const ListNode<T>& rhs) noexcept
 template<class T>
 inline ListNode<T>& ListNode<T>::operator=(ListNode<T>&& rhs) noexcept
 {
-	this = *rhs;
-	rhs.~ListNode();
+	if (this != &rhs)
+	{
+		next_ = rhs.next_;
+		previous_ = rhs.previous_;
+	}
+	data = std::move(rhs.data_);
+	rhs.next_ = nullptr;
+	rhs.previous_ = nullptr;
+	return *this;
 }
 
 template<class T>

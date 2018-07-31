@@ -451,5 +451,37 @@ namespace UnitTests
 				Assert::Fail(exception.What());
 			}
 		}
+
+		TEST_METHOD(ListMerge_ShouldMergeList1AndList2)
+		{
+			CrtCheckMemory check;
+			try
+			{
+				List<size_t> list1;
+				list1.Append(0);
+				list1.Append(2);
+				list1.Append(4);
+				list1.Append(6);
+				List<size_t> list2;
+				list2.Append(1);
+				list2.Append(3);
+				list2.Append(5);
+				list2.Append(7);
+				list2.Append(8);
+				list2.Append(9);
+				size_t i = 0;
+
+				list1.Merge(list2);
+
+				for (auto list_node = list1.GetHead(); list_node != nullptr; list_node = list_node->GetNext())
+				{
+					Assert::AreEqual(i++, list_node->GetData());
+				}
+			}
+			catch (AdtException & exception)
+			{
+				Assert::Fail(exception.What());
+			}
+		}
 	};
 }

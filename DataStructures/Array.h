@@ -77,31 +77,35 @@ inline Array<T>::Array(const Array<T>& array)
 template<class T>
 inline Array<T>& Array<T>::operator=(const Array<T>& rhs)
 {
-	storage_ = new T[rhs.length_];
-	for (int i = 0; i < rhs.length_; i++)
+	if (this != &rhs)
 	{
-		storage_[i] = rhs.storage_[i];
+		delete storage_;
+		storage_ = new T[rhs.length_];
+		for (int i = 0; i < rhs.length_; i++)
+		{
+			storage_[i] = rhs.storage_[i];
+		}
+		length_ = rhs.length_;
+		start_index_ = rhs.start_index_;
 	}
-	length_ = rhs.length_;
-	start_index_ = rhs.start_index_;
 	return *this;
 }
 
 template<class T>
 inline Array<T>::Array(Array<T>&& array) noexcept
 {
-	length_ = array.length_;
-	storage_ = array.storage_;
-	array.length_ = 0;
-	array.storage_ = nullptr;
+	*this = std::move(array);
 }
 
 template<class T>
 inline Array<T>& Array<T>::operator=(Array<T>&& rhs) noexcept(false)
 {
-	delete storage_;
-	length_ = rhs.length_;
-	storage_ = rhs.storage_;
+	if (this != &rhs)
+	{
+		delete storage_;
+		length_ = rhs.length_;
+		storage_ = rhs.storage_;
+	}
 	rhs.length_ = 0;
 	rhs.storage_ = nullptr;
 

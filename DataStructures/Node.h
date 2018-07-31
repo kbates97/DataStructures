@@ -58,25 +58,26 @@ inline Node<T>::Node(const T & data) noexcept
 template<class T>
 inline Node<T>::Node(const Node & copy) noexcept
 {
-	this = copy;
+	*this = copy;
 }
 
 template<class T>
 inline Node<T>::Node(Node && copy) noexcept
 {
-	*this = copy;
-	copy.~Node();
+	*this = std::move(copy);
 }
 
 template<class T>
 inline Node<T> & Node<T>::operator=(const Node & rhs) noexcept
 {
-	this->data_ = rhs.data_;
+	if (this != &rhs)
+		data_ = rhs.data_;
+	return *this;
 }
 
 template<class T>
 inline Node<T> & Node<T>::operator=(Node && rhs) noexcept
 {
-	this = *rhs;
-	rhs.~Node();
+	data_ = std::move(rhs.data_);
+	return *this;
 }

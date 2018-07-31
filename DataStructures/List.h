@@ -7,6 +7,7 @@
 #include "Array.h"
 #include "ForwardIterator.h"
 #include "BackwardIterator.h"
+#include <random>;
 
 template<class T>
 class List
@@ -41,6 +42,9 @@ public:
 	ForwardIterator<T> ForwardEnd();
 	BackwardIterator<T> BackwardBegin();
 	BackwardIterator<T> BackwardEnd();
+
+	List<T>& Merge(const List<T>& rhs);
+	void Shuffle();
 private:
 	ListNode<T>* head_ = nullptr;
 	ListNode<T>* tail_ = nullptr;
@@ -91,6 +95,52 @@ inline BackwardIterator<T> List<T>::BackwardEnd()
 }
 
 template<class T>
+inline List<T>& List<T>::Merge(const List<T>& rhs)
+{
+	ListNode<T> * rhs_iterator = rhs.head_;
+	ListNode<T> * list_iterator = head_;
+	List<T> temp;
+	while (list_iterator != nullptr || rhs_iterator != nullptr)
+	{
+		if (list_iterator != nullptr)
+		{
+			temp.Append(list_iterator->GetData());
+			list_iterator = list_iterator->GetNext();
+		}
+		if (rhs_iterator != nullptr)
+		{
+			temp.Append(rhs_iterator->GetData());
+			rhs_iterator = rhs_iterator->GetNext();
+		}
+	}
+	*this = temp;
+	return *this;
+}
+
+template<class T>
+inline void List<T>::Shuffle()
+{
+	std::random_device device;
+	std::mt19937 generator(device());
+	size_t size = 0;
+	for (ListNode<T>* iterator = head_; iterator != nullptr; iterator = iterator->GetNext())
+	{
+		++size;
+	}
+	std::uniform_int_distribution<int> distribution(0, size);
+	for (size_t i = 0; i < size; ++i)
+	{
+		ListNode<T>* iterator = head_;
+		for (size_t k = 0; k < distribution(generator); ++k)
+		{
+			iterator = iterator->GetNext();
+		}
+		Append(iterator->GetData());
+		Extract(iterator->GetData());
+	}
+}
+
+template<class T>
 inline List<T>::List(const List<T> & copy) noexcept(false)
 {
 	*this = copy;
@@ -99,8 +149,7 @@ inline List<T>::List(const List<T> & copy) noexcept(false)
 template<class T>
 inline List<T>::List(List<T> && copy) noexcept
 {
-	*this = copy;
-	copy.Purge();
+	*this = std::move(copy);
 }
 
 template<class T>
@@ -112,10 +161,13 @@ inline List<T>::~List() noexcept
 template<class T>
 inline List<T> & List<T>::operator=(const List<T> & rhs) noexcept(false)
 {
-	this->~List();
-	for (ListNode<T>* list_node = rhs.head_; list_node != nullptr; list_node = list_node->GetNext())
+	if (this != &rhs)
 	{
-		this->Append(list_node->GetData());
+		Purge();
+		for (ListNode<T>* list_node = rhs.head_; list_node != nullptr; list_node = list_node->GetNext())
+		{
+			this->Append(list_node->GetData());
+		}
 	}
 	return *this;
 }
@@ -123,7 +175,7 @@ inline List<T> & List<T>::operator=(const List<T> & rhs) noexcept(false)
 template<class T>
 inline List<T> & List<T>::operator=(List<T> && rhs) noexcept
 {
-	this->~List();
+	Purge();
 	for (ListNode<T>* list_node = rhs.head_; list_node != nullptr; list_node = list_node->GetNext())
 	{
 		this->Append(list_node->GetData());

@@ -34,3 +34,44 @@ private:
 	function<void(const BstNode<T,U> * const node)> visit_;
 };
 #endif
+
+template<class T, class U>
+inline BSTree<T, U>::~BSTree()
+{
+	Clear();
+}
+
+template<class T, class U>
+inline BSTree<T, U>& BSTree<T, U>::operator=(const BSTree<T, U>& rhs) noexcept(false)
+{
+	root_ = rhs.root_;
+	visit_ = rhs.visit_;
+	return *this;
+}
+
+template<class T, class U>
+inline BSTree<T, U>& BSTree<T, U>::operator=(BSTree<T, U>&& rhs) noexcept
+{
+	root_ = rhs.root;
+	visit_ = std::move(visit);
+	rhs.root_ = nullptr;
+	return *this;
+}
+
+template<class T, class U>
+inline void BSTree<T, U>::SetVisitFunction(function<void(const BStNode<T, U>*const node)> visit) noexcept
+{
+	visit_ = visit;
+}
+
+template<class T, class U>
+inline BSTree<T, U>::BSTree(const BSTree<T, U>& copy) noexcept(false)
+{
+	*this = copy;
+}
+
+template<class T, class U>
+inline BSTree<T, U>::BSTree(BSTree<T, U>&& copy) noexcept
+{
+	*this = std::move(copy);
+}

@@ -68,12 +68,10 @@ inline Array2D<T>& Array2D<T>::operator=(const Array2D& rhs)
 				storage_[(int)i*rhs.GetColumn() + (int)k] = rhs[(int)i][(int)k];
 			}
 		}*/
-		storage_.~Array();
 		storage_ = rhs.storage_;
+		row_ = rhs.GetRow();
+		col_ = rhs.GetColumn();
 	}
-	
-	row_ = rhs.GetRow();
-	col_ = rhs.GetColumn();
 	return *this;
 }
 
@@ -157,7 +155,6 @@ inline void Array2D<T>::SetRow(const int rows)
 			temp[i] = storage_[i];
 		}
 	}
-	storage_.~Array();
 	storage_ = temp;
 	row_ = rows;
 }

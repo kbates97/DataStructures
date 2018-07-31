@@ -47,7 +47,6 @@ inline ArrayStack<T>::ArrayStack(const ArrayStack & copy) noexcept(false)
 template<class T>
 inline ArrayStack<T>& ArrayStack<T>::operator=(const ArrayStack & rhs) noexcept(false)
 {
-	stack_.~Array();
 	stack_ = rhs.stack_;
 	numItems_ = rhs.numItems_;
 	return *this;

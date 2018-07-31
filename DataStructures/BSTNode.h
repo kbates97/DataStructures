@@ -24,3 +24,73 @@ private:
 };
 
 #endif
+
+template<class T, class U>
+inline BSTNode<T, U>::BSTNode(const T data, const U key, BSTNode<T, U>* right, BSTNode<T, U>* left)
+{
+	data_ = data;
+	key_ = key;
+	right_ = right;
+	left_ = left;
+}
+
+template<class T, class U>
+inline BSTNode<T, U>::BSTNode(const BSTNode<T, U>& copy) noexcept
+{
+	*this = copy;
+}
+
+template<class T, class U>
+inline BSTNode<T, U>& BSTNode<T, U>::operator=(const BSTNode<T, U>& rhs) noexcept
+{
+	if (this != &rhs)
+	{
+		data_ = rhs.data_;
+		key_ = rhs.key_;
+		left_ = rhs.left_;
+		right_ = rhs.right_;
+	}
+	return *this;
+}
+
+template<class T, class U>
+inline BSTNode<T, U>::BSTNode(BSTNode<T, U>&& copy) noexcept
+{
+	*this = std::move(copy);
+}
+
+template<class T, class U>
+inline BSTNode<T, U>& BSTNode<T, U>::operator=(BSTNode<T, U>&& rhs) noexcept
+{
+	data_ = std::move(rhs.data_);
+	key_ = std::move(rhs.key_);
+	left_ = rhs.left_;
+	right_ = rhs.right_;
+	rhs.left_ = nullptr;
+	rhs.right_ = nullptr;
+	return *this;
+}
+
+template<class T, class U>
+inline BSTNode<T, U>* BSTNode<T, U>::GetLeft() const noexcept
+{
+	return left_;
+}
+
+template<class T, class U>
+inline BSTNode<T, U>* BSTNode<T, U>::GetRight() const noexcept
+{
+	return right_;
+}
+
+template<class T, class U>
+inline void BSTNode<T, U>::SetLeft(BSTNode<T, U>* const left) noexcept
+{
+	left_ = left;
+}
+
+template<class T, class U>
+inline void BSTNode<T, U>::SetRight(BSTNode<T, U>* const right) noexcept
+{
+	right_ = right;
+}

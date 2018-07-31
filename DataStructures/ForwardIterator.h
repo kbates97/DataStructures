@@ -88,13 +88,13 @@ inline ForwardIterator<T> ForwardIterator<T>::operator++(int) noexcept
 template<class T>
 inline bool ForwardIterator<T>::operator==(ListIterator<T>& rhs) noexcept
 {
-	return GetCurrent() == rhs.GetCurrent();
+	return *this == rhs.GetCurrent();
 }
 
 template<class T>
 inline bool ForwardIterator<T>::operator!=(ListIterator<T>& rhs) noexcept
 {
-	return !(GetCurrent() == rhs.GetCurrent());
+	return !(*this == rhs.GetCurrent());
 }
 
 template<class T>

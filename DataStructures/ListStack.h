@@ -21,6 +21,8 @@ public:
 	bool IsEmpty() const;
 	void Clear() noexcept;
 
+	void Shuffle();
+
 private:
 	List<T> stack_;
 	size_t size_ = 0;
@@ -101,4 +103,10 @@ inline void ListStack<T>::Clear() noexcept
 {
 	size_ = 0;
 	stack_.Purge();
+}
+
+template<class T>
+inline void ListStack<T>::Shuffle()
+{
+	stack_.Shuffle();
 }
