@@ -12,7 +12,7 @@ public:
     void SetKey(const U key) noexcept(false);
 	virtual ~PairNode() = 0;
 protected:
-	PairNode() = delete;
+	PairNode() = default;
 	PairNode(const T data, const U key) noexcept;
 	PairNode(const PairNode& copy) noexcept;
 	PairNode(PairNode&& copy) noexcept;
@@ -43,6 +43,12 @@ inline void PairNode<T, U>::SetKey(const U key) noexcept(false)
 }
 
 template<class T, class U>
+inline PairNode<T, U>::~PairNode()
+{
+
+}
+
+template<class T, class U>
 inline PairNode<T, U>::PairNode(const T data, const U key) noexcept
 {
 	data_ = data;
@@ -62,7 +68,7 @@ inline PairNode<T, U>::PairNode(PairNode && copy) noexcept
 }
 
 template<class T, class U>
-inline PairNode & PairNode<T, U>::operator=(const PairNode & rhs) noexcept
+inline PairNode<T, U> & PairNode<T, U>::operator=(const PairNode & rhs) noexcept
 {
 	if (this != &rhs)
 	{
@@ -73,7 +79,7 @@ inline PairNode & PairNode<T, U>::operator=(const PairNode & rhs) noexcept
 }
 
 template<class T, class U>
-inline PairNode & PairNode<T, U>::operator=(PairNode && rhs) noexcept
+inline PairNode<T, U> & PairNode<T, U>::operator=(PairNode && rhs) noexcept
 {
 	data_ = std::move(rhs.data_);
 	key_ = std::move(rhs.key_);

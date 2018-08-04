@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef ForwardIterator_H
-#define ForwardIteraror_H
+#define ForwardIterator_H
 
 #include "ListIterator.h"
 
@@ -19,14 +19,13 @@ public:
 	ListNode<T>* operator=(const ListNode<T>* rhs) noexcept override;
 	ForwardIterator<T> & operator++() noexcept;
 	ForwardIterator<T> operator++(int) noexcept;
-	bool operator==(ListIterator<T> & rhs) noexcept;
-	bool operator!=(ListIterator<T> & rhs) noexcept;
+	friend bool operator==(ForwardIterator<T>& lhs, ForwardIterator<T> & rhs) noexcept;
+	friend bool operator!=(ForwardIterator<T>& lhs, ForwardIterator<T> & rhs) noexcept;
 
 	void MoveNext() noexcept override;
 	void Reset() noexcept override;
 };
 
-#endif // !ForwardIterator_H
 
 template<class T>
 inline ForwardIterator<T>::ForwardIterator(const ForwardIterator<T>& copy) noexcept
@@ -81,20 +80,20 @@ inline ForwardIterator<T>& ForwardIterator<T>::operator++() noexcept
 template<class T>
 inline ForwardIterator<T> ForwardIterator<T>::operator++(int) noexcept
 {
-	MoveNext;
+	MoveNext();
 	return *this;
 }
 
 template<class T>
-inline bool ForwardIterator<T>::operator==(ListIterator<T>& rhs) noexcept
+inline bool operator==(ForwardIterator<T>& lhs, ForwardIterator<T>& rhs) noexcept
 {
-	return *this == rhs.GetCurrent();
+	return lhs.GetCurrent() == rhs.GetCurrent();
 }
 
 template<class T>
-inline bool ForwardIterator<T>::operator!=(ListIterator<T>& rhs) noexcept
+inline bool operator!=(ForwardIterator<T>& lhs, ForwardIterator<T>& rhs) noexcept
 {
-	return !(*this == rhs.GetCurrent());
+	return !(lhs.GetCurrent() == rhs.GetCurrent());
 }
 
 template<class T>
@@ -109,3 +108,6 @@ inline void ForwardIterator<T>::Reset() noexcept
 	done_ = true;
 	node_ = nullptr;
 }
+
+
+#endif // !ForwardIterator_H

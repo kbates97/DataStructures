@@ -28,8 +28,8 @@ private:
 template<class T, class U>
 inline BSTNode<T, U>::BSTNode(const T data, const U key, BSTNode<T, U>* right, BSTNode<T, U>* left)
 {
-	data_ = data;
-	key_ = key;
+	SetKey(key);
+	SetData(data);
 	right_ = right;
 	left_ = left;
 }

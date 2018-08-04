@@ -19,14 +19,13 @@ public:
 	ListNode<T>* operator=(const ListNode<T>* rhs) noexcept override;
 	BackwardIterator<T> & operator++() noexcept;
 	BackwardIterator<T> operator++(int) noexcept;
-	bool operator==(ListIterator<T> & rhs) noexcept;
-	bool operator!=(ListIterator<T> & rhs) noexcept;
+	friend bool operator==(BackwardIterator<T>& lhs, BackwardIterator<T> & rhs) noexcept;
+	friend bool operator!=(BackwardIterator<T>& lhs, BackwardIterator<T> & rhs) noexcept;
 
 	void MoveNext() noexcept override;
 	void Reset() noexcept override;
 };
 
-#endif // !BackwardIterator_H
 
 template<class T>
 inline BackwardIterator<T>::BackwardIterator(const BackwardIterator<T>& copy) noexcept
@@ -86,15 +85,15 @@ inline BackwardIterator<T> BackwardIterator<T>::operator++(int) noexcept
 }
 
 template<class T>
-inline bool BackwardIterator<T>::operator==(ListIterator<T>& rhs) noexcept
+inline bool operator==(BackwardIterator<T>& lhs, BackwardIterator<T>& rhs) noexcept
 {
-	return (*this == rhs.GetCurrent());
+	return (lhs.GetCurrent() == rhs.GetCurrent());
 }
 
 template<class T>
-inline bool BackwardIterator<T>::operator!=(ListIterator<T>& rhs) noexcept
+inline bool operator!=(BackwardIterator<T>& lhs, BackwardIterator<T>& rhs) noexcept
 {
-	return !(*this == rhs.GetCurrent());
+	return !(lhs.GetCurrent() == rhs.GetCurrent());
 }
 
 template<class T>
@@ -109,3 +108,5 @@ inline void BackwardIterator<T>::Reset() noexcept
 	done_ = true;
 	node_ = nullptr;
 }
+
+#endif // !BackwardIterator_H

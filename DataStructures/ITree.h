@@ -13,8 +13,8 @@ public:
     virtual void PreOrder() const noexcept = 0;
     virtual void PostOrder() const noexcept = 0;
 	virtual void BreadthFirst() const noexcept = 0;
-	virtual void Insert(const T data, const U key) noexcept(false);
-	virtual void Delete(const U key) noexcept(false) = 0;
+	virtual void Insert(const T data, const U key) noexcept(false) = 0;
+	virtual void Delete(const U& key) noexcept(false) = 0;
     virtual T Search(const U& key) const noexcept(false) = 0;
     virtual T& Search(const U& key) noexcept(false) = 0;
 };
