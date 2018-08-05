@@ -61,7 +61,13 @@ inline BSTree<T, U>::~BSTree()
 template<class T, class U>
 inline BSTree<T, U>& BSTree<T, U>::operator=(const BSTree<T, U>& rhs) noexcept(false)
 {
-	root_ = rhs.root_;
+	Clear();
+	visit_ = [&](const BSTNode<T, U> * const node)
+	{
+		Insert(node->GetData(), node->GetKey());
+	};
+	ListQueue<BSTNode<T, U>*> queue;
+	BreadthFirst_(rhs.root_, queue);
 	visit_ = rhs.visit_;
 	return *this;
 }
@@ -70,8 +76,8 @@ template<class T, class U>
 inline BSTree<T, U>& BSTree<T, U>::operator=(BSTree<T, U>&& rhs) noexcept
 {
 	Clear();
-	root_ = rhs.root;
-	visit_ = std::move(visit);
+	root_ = rhs.root_;
+	visit_ = std::move(rhs.visit_);
 	rhs.root_ = nullptr;
 	return *this;
 }
@@ -115,12 +121,16 @@ inline BSTree<T, U>::BSTree(BSTree<T, U>&& copy) noexcept
 template<class T, class U>
 inline void BSTree<T, U>::Clear() noexcept
 {
-	auto temp = visit_;
-	visit_ = [](const BSTNode<T, U>* const node) {
-		delete node;
-	};
-	PostOrder();
-	visit_ = temp;
+	if (root_ != nullptr)
+	{
+		auto temp = visit_;
+		visit_ = [](const BSTNode<T, U>* const node) {
+			delete node;
+		};
+		PostOrder();
+		root_ = nullptr;
+		visit_ = temp;
+	}
 }
 
 template<class T, class U>
@@ -221,9 +231,9 @@ inline size_t BSTree<T, U>::Height_(const BSTNode<T, U>* const node)
 	int left_height = Height_(node->GetLeft());
 	int right_height = Height_(node->GetRight());
 	if (left_height > right_height)
-		return left_height;
+		return left_height + 1;
 	else
-		return right_height;
+		return right_height + 1;
 }
 
 template<class T, class U>
@@ -273,16 +283,14 @@ inline T& BSTree<T, U>::Search_(BSTNode<T, U>* const node, const U & key)
 template<class T, class U>
 inline void BSTree<T, U>::FindNodeToDelete_(BSTNode<T, U>* prev, BSTNode<T, U>* current, const U & key)
 {
-	while (current->GetKey() != key)
-	{
-		if (current == nullptr)
-			throw AdtException("Not Found");
-		if (key > current->GetKey())
-			FindNodeToDelete_(current, current->GetRight(), key);
-		else if (key < current->GetKey())
-			FindNodeToDelete_(current, current->GetLeft(), key);
-	}
-	RemoveFromTree_(prev, current, key);
+	if (current == nullptr)
+		throw AdtException("Not Found");
+	if (key > current->GetKey())
+		FindNodeToDelete_(current, current->GetRight(), key);
+	else if (key < current->GetKey())
+		FindNodeToDelete_(current, current->GetLeft(), key);
+	else
+		RemoveFromTree_(prev, current, key);
 }
 
 template<class T, class U>
@@ -301,9 +309,21 @@ inline void BSTree<T, U>::RemoveFromTree_(BSTNode<T, U>* prev, BSTNode<T, U>* cu
 template<class T, class U>
 inline void BSTree<T, U>::DeleteLeaf_(BSTNode<T, U>* prev, const U & key)
 {
-	if (key > prev->GetKey())
+	if (prev == root_ && prev->GetKey() == key)
+	{
+		delete prev;
+		root_ = nullptr;
+	}
+	else if (key > prev->GetKey())
+	{
 		delete prev->GetRight();
-	else delete prev->GetLeft();
+		prev->SetRight(nullptr);
+	}
+	else
+	{
+		delete prev->GetLeft();
+		prev->SetLeft(nullptr);
+	}
 }
 
 template<class T, class U>
@@ -331,7 +351,10 @@ inline void BSTree<T, U>::DeleteWithLeftAndRightTree_(BSTNode<T, U>* deleteNode,
 {
 	if (current->GetRight() != nullptr)
 		DeleteWithLeftAndRightTree_(deleteNode, current, current->GetRight(), key);
-	deleteNode->SetData(current->GetData());
-	deleteNode->SetKey(current->GetKey());
-	RemoveFromTree_(prev, current, key);
+	else
+	{
+		deleteNode->SetData(current->GetData());
+		deleteNode->SetKey(current->GetKey());
+		RemoveFromTree_(prev, current, current->GetKey());
+	}
 }
