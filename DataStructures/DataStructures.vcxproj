@@ -23,12 +23,26 @@
     <ClInclude Include="Array.h" />
     <ClInclude Include="Array2D.h" />
     <ClInclude Include="Array2DP.h" />
+    <ClInclude Include="ArrayQueue.h" />
+    <ClInclude Include="ArrayStack.h" />
+    <ClInclude Include="AVLNode.h" />
+    <ClInclude Include="AVLTree.h" />
+    <ClInclude Include="BackwardIterator.h" />
+    <ClInclude Include="BSTNode.h" />
+    <ClInclude Include="BSTree.h" />
+    <ClInclude Include="ForwardIterator.h" />
     <ClInclude Include="IArray2D.h" />
     <ClInclude Include="IRow.h" />
+    <ClInclude Include="Iterator.h" />
+    <ClInclude Include="ITree.h" />
     <ClInclude Include="List.h" />
+    <ClInclude Include="ListIterator.h" />
     <ClInclude Include="ListNode.h" />
+    <ClInclude Include="ListQueue.h" />
+    <ClInclude Include="ListStack.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Pair.h" />
+    <ClInclude Include="PairNode.h" />
     <ClInclude Include="Row.h" />
   </ItemGroup>
   <ItemGroup>

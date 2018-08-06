@@ -62,25 +62,25 @@ inline Array2D<T>& Array2D<T>::operator=(const Array2D& rhs)
 {
 	if (this != &rhs)
 	{
-		storage_.SetLength(rhs.GetRow() * rhs.GetColumn());
+		/*storage_.SetLength(rhs.GetRow() * rhs.GetColumn());
 		for (size_t i = 0; i < rhs.GetRow(); i++) {
 			for (size_t k = 0; k < rhs.GetColumn(); k++) {
 				storage_[(int)i*rhs.GetColumn() + (int)k] = rhs[(int)i][(int)k];
 			}
-		}
+		}*/
+		storage_ = rhs.storage_;
+		row_ = rhs.GetRow();
+		col_ = rhs.GetColumn();
 	}
-	
-	row_ = rhs.GetRow();
-	col_ = rhs.GetColumn();
 	return *this;
 }
 
 template<class T>
 inline Array2D<T>::Array2D(Array2D<T>&& array) noexcept
 {
+	storage_ = std::move(array.storage_);
 	row_ = array.row_;
 	col_ = array.col_;
-	storage_ = std::move(array.storage_);
 	array.row_ = 0;
 	array.col_ = 0;
 }
@@ -100,12 +100,16 @@ inline Array2D<T>& Array2D<T>::operator=(Array2D<T>&& rhs) noexcept
 template<class T>
 inline T& Array2D<T>::Select(const int row, const int column)
 {
+	if (row > row_-1 || column > col_-1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row * col_ + column];
 }
 
 template<class T>
 inline T Array2D<T>::Select(const int row, const int column) const
 {
+	if (row > row_ - 1 || column > col_ - 1 || row < 0 || column < 0)
+		throw AdtException("Out of bounds");
 	return storage_[row * col_ + column];
 }
 
@@ -151,8 +155,7 @@ inline void Array2D<T>::SetRow(const int rows)
 			temp[i] = storage_[i];
 		}
 	}
-	storage_.~Array();
-	storage_ = std::move(temp);
+	storage_ = temp;
 	row_ = rows;
 }
 
@@ -177,8 +180,7 @@ inline void Array2D<T>::SetColumn(const int columns)
 			temp.storage_[i] = storage_[i];
 		}
 	}
-	storage_.~Array();
-	*this = std::move(temp);
+	*this = temp;
 	col_ = columns;
 }
 #endif

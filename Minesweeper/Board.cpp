@@ -6,7 +6,7 @@ Board::Board()
 	board_.SetRow(10);
 	board_.SetColumn(10);
 	bombs_ = 10;
-	resetBoard();
+	ResetBoard();
 }
 
 Board::Board(size_t difficulty)
@@ -14,24 +14,28 @@ Board::Board(size_t difficulty)
 	switch (difficulty)
 	{
 	default:
+		board_.SetRow(10);
+		board_.SetColumn(10);
+		bombs_ = 10;
+		ResetBoard();
 		break;
 	case 1:
 		board_.SetRow(10);
 		board_.SetColumn(10);
 		bombs_ = 10;
-		resetBoard();
+		ResetBoard();
 		break;
 	case 2:
 		board_.SetRow(16);
 		board_.SetColumn(16);
 		bombs_ = 40;
-		resetBoard();
+		ResetBoard();
 		break;
 	case 3:
 		board_.SetRow(16);
 		board_.SetRow(30);
 		bombs_ = 100;
-		resetBoard();
+		ResetBoard();
 		break;
 	}
 }
@@ -53,30 +57,35 @@ void Board::SetDifficulty(const size_t difficulty)
 	switch (difficulty)
 	{
 	default:
+		board_.SetRow(10);
+		board_.SetColumn(10);
+		bombs_ = 10;
+		ResetBoard();
 		break;
 	case 1:
 		board_.SetRow(10);
 		board_.SetColumn(10);
 		bombs_ = 10;
-		resetBoard();
+		ResetBoard();
 		break;
 	case 2:
 		board_.SetRow(16);
 		board_.SetColumn(16);
 		bombs_ = 40;
-		resetBoard();
+		ResetBoard();
 		break;
 	case 3:
 		board_.SetRow(16);
 		board_.SetColumn(30);
 		bombs_ = 100;
-		resetBoard();
+		ResetBoard();
 		break;
 	}
 }
 
-void Board::resetBoard()
+void Board::ResetBoard()
 {
+	ClearBoard();
 	size_t bombsPlaced = 0;
 	while (bombsPlaced < bombs_)
 	{
@@ -86,7 +95,7 @@ void Board::resetBoard()
 		{
 			board_[row][col].SetData('B');
 			bombsPlaced += 1;
-			incrementNumbersAroundBomb(row, col);
+			IncrementNumbersAroundBomb(row, col);
 		}
 	}
 	for (size_t i = 0; i < board_.GetRow(); ++i)
@@ -98,7 +107,7 @@ void Board::resetBoard()
 	}
 }
 
-void Board::incrementNumbersAroundBomb(int row, int col)
+void Board::IncrementNumbersAroundBomb(int row, int col)
 {
 	if (row > 0)
 	{
@@ -142,8 +151,9 @@ void Board::incrementNumbersAroundBomb(int row, int col)
 	}
 }
 
-void Board::printBoard()
+void Board::PrintBoard()
 {
+	system("CLS");
 	for (size_t i = 0; i < board_.GetRow(); ++i)
 	{
 		for (size_t k = 0; k < board_.GetColumn(); ++k)
@@ -154,12 +164,18 @@ void Board::printBoard()
 	}
 }
 
+bool Board::AllBombsMarked()
+{
+	return (bombsMarked_ == bombs_);
+}
+
 char Board::Select(const int row, const int col)
 {
 	if (!board_[row][col].GetMarked())
 	{
 		board_[row][col].SetVisible(true);
-		ClearBlanks(row, col);
+		if (board_[row][col].GetData() == '0')
+			ClearBlanks(row, col);
 		return board_[row][col].GetData();
 	}
 	else
@@ -168,7 +184,20 @@ char Board::Select(const int row, const int col)
 
 void Board::Mark(const int row, const int col)
 {
-	board_[row][col].SetMarked(true);
+	if (board_[row][col].GetMarked())
+	{
+		board_[row][col].SetMarked(false);
+		if (board_[row][col].GetData() == 'B')
+			--bombsMarked_;
+	}
+	else
+	{
+		board_[row][col].SetMarked(true);
+		if (board_[row][col].GetData() == 'B')
+			++bombsMarked_;
+		else
+			--bombsMarked_;
+	}
 }
 
 void Board::ClearBlanks(const int row, const int col)
@@ -222,5 +251,16 @@ void Board::ClearBlanks(const int row, const int col)
 		if (board_[row][col + 1].GetData() == '0' && board_[row][col + 1].GetVisible() == false)
 			ClearBlanks(row, col + 1);
 		board_[row][col + 1].SetVisible(true);
+	}
+}
+
+void Board::ClearBoard()
+{
+	for (size_t i = 0; i < board_.GetRow(); ++i)
+	{
+		for (size_t k = 0; k < board_.GetColumn(); ++k)
+		{
+			board_[i][k].SetData('0');
+		}
 	}
 }

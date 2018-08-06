@@ -11,7 +11,7 @@ public:
 	~Array();
 	explicit Array(size_t length, int start_index = 0) noexcept(false);
 
-	explicit Array(const int * c_array, const size_t size);
+	explicit Array(const T * c_array, const size_t size);
 
 	Array(const Array<T>& array) noexcept(false);
 
@@ -55,7 +55,7 @@ inline Array<T>::Array(size_t length, int start_index)
 }
 
 template<class T>
-inline Array<T>::Array(const int * c_array, const size_t size)
+inline Array<T>::Array(const T * c_array, const size_t size)
 {
 	if (size > 0)
 	{
@@ -77,30 +77,35 @@ inline Array<T>::Array(const Array<T>& array)
 template<class T>
 inline Array<T>& Array<T>::operator=(const Array<T>& rhs)
 {
-	storage_ = new T[rhs.length_];
-	for (int i = 0; i < rhs.length_; i++)
+	if (this != &rhs)
 	{
-		storage_[i] = rhs.storage_[i];
+		delete storage_;
+		storage_ = new T[rhs.length_];
+		for (int i = 0; i < rhs.length_; i++)
+		{
+			storage_[i] = rhs.storage_[i];
+		}
+		length_ = rhs.length_;
+		start_index_ = rhs.start_index_;
 	}
-	length_ = rhs.length_;
-	start_index_ = rhs.start_index_;
 	return *this;
 }
 
 template<class T>
 inline Array<T>::Array(Array<T>&& array) noexcept
 {
-	length_ = array.length_;
-	storage_ = array.storage_;
-	array.length_ = 0;
-	array.storage_ = nullptr;
+	*this = std::move(array);
 }
 
 template<class T>
 inline Array<T>& Array<T>::operator=(Array<T>&& rhs) noexcept(false)
 {
-	length_ = rhs.length_;
-	storage_ = rhs.storage_;
+	if (this != &rhs)
+	{
+		delete storage_;
+		length_ = rhs.length_;
+		storage_ = rhs.storage_;
+	}
 	rhs.length_ = 0;
 	rhs.storage_ = nullptr;
 
@@ -110,7 +115,7 @@ inline Array<T>& Array<T>::operator=(Array<T>&& rhs) noexcept(false)
 template<class T>
 inline T& Array<T>::operator[](int index)
 {
-	if (length_ < index - start_index_)
+	if (length_ < index - start_index_ || index - start_index_ < 0)
 		throw AdtException("Out of bounds");
 	index -= start_index_;
 	return storage_[index];
@@ -119,6 +124,8 @@ inline T& Array<T>::operator[](int index)
 template<class T>
 inline T Array<T>::operator[](int index) const
 {
+	if (length_ < index - start_index_ || index - start_index_ < 0)
+		throw AdtException("Out of bounds");
 	index -= start_index_;
 	return storage_[index];
 }
