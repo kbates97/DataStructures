@@ -172,6 +172,7 @@
     <ClCompile Include="ArrayQueueTest.cpp" />
     <ClCompile Include="ArrayTest.cpp" />
     <ClCompile Include="BSTreeTest.cpp" />
+    <ClCompile Include="GenericTreeTest.cpp" />
     <ClCompile Include="IteratorsTestClassStarter.cpp" />
     <ClCompile Include="ListQueueTest.cpp" />
     <ClCompile Include="ListStackTest.cpp" />
