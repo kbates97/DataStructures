@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdtException.h" />
+    <ClInclude Include="Arc.h" />
     <ClInclude Include="Array.h" />
     <ClInclude Include="Array2D.h" />
     <ClInclude Include="Array2DP.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="ForwardIterator.h" />
     <ClInclude Include="GenericTree.h" />
     <ClInclude Include="GenericTreeNode.h" />
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="IArray2D.h" />
     <ClInclude Include="IRow.h" />
     <ClInclude Include="Iterator.h" />
@@ -46,6 +48,7 @@
     <ClInclude Include="Pair.h" />
     <ClInclude Include="PairNode.h" />
     <ClInclude Include="Row.h" />
+    <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdtException.cpp" />
