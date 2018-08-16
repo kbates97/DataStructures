@@ -87,7 +87,7 @@ namespace Graphs
 	template<class V, class E>
 	inline Graph<V, E>& Graph<V, E>::operator=(Graph && rhs) noexcept
 	{
-		vertices_ = std:move(rhs.vertices_);
+		vertices_ = std::move(rhs.vertices_);
 		visit_ = std::move(rhs.visit_);
 		return *this;
 	}
@@ -102,7 +102,11 @@ namespace Graphs
 	template<class V, class E>
 	inline void Graph<V, E>::InsertVertex(V data)
 	{
-		vertices_.push_back(Vertex<V, E>(data));
+		auto it = GetMapBeginIterator();
+		while (it != GetMapEndIterator() && it->GetData() != data)
+			++it;
+		if (it == GetMapEndIterator())
+			vertices_.push_back(Vertex<V, E>(data));
 	}
 
 	template<class V, class E>

@@ -138,7 +138,7 @@ namespace Graphs
 		while (it->GetData() != arc_data && it != arcs_.end())
 			++it;
 		if (it == arcs_.end())
-			throw AdtException("Not Found");
+			return;
 		DecrementOutDegree();
 		it->GetDestination()->DecrementInDegree();
 		arcs_.erase(it);
